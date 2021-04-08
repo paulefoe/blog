@@ -1,0 +1,2 @@
+[global.databases]
+posts = { url = "/home/paulefou/other_projects/diesel_demo/db.sqlite" }

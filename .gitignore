@@ -2,3 +2,4 @@
 Cargo.lock
 *.sqlite
 .env
+.idea/

@@ -1,0 +1,16 @@
+{{#*inline "page"}}
+
+<section id="article-body">
+    <h2 class="article-title">
+        {{post.title}}
+    </h2>
+    <time class="dt-published">
+        {{formatDate this.created_at}}
+    </time>
+    <div class="content">
+        {{formatArticle post.body }}
+    </div>
+</section>
+
+{{/inline}}
+{{~> (parent)~}}

@@ -39,6 +39,7 @@ pub fn create_post<'a>(
         description: description,
         published: false,
         views_count: 0,
+        slug: "slug",
     };
 
     diesel::insert_into(posts::table)

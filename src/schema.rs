@@ -7,5 +7,6 @@ table! {
         created_at -> Nullable<Timestamp>,
         views_count -> Nullable<Integer>,
         description -> Text,
+        slug -> Text,
     }
 }

@@ -5,5 +5,6 @@ CREATE TABLE posts (
     published BOOLEAN NOT NULL DEFAULT 'f',
     created_at timestamp default current_timestamp,
     views_count INTEGER default 0,
-    description TEXT NOT NULL
+    description TEXT NOT NULL,
+    slug varchar not null
 );

@@ -114,3 +114,7 @@ footer {
     font-size: .66em;
     color: #444;
 }
+
+#article-body {
+    margin: auto;
+}
