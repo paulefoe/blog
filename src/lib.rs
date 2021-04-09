@@ -29,6 +29,7 @@ pub fn create_post<'a>(
     title: &'a str,
     body: &'a str,
     description: &'a str,
+    slug: &'a str,
     ) -> QueryResult<usize> {
     use schema::posts;
     let now = Utc::now();
@@ -39,7 +40,7 @@ pub fn create_post<'a>(
         description: description,
         published: false,
         views_count: 0,
-        slug: "slug",
+        slug: slug,
     };
 
     diesel::insert_into(posts::table)
