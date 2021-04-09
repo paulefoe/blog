@@ -15,10 +15,12 @@ fn main() {
     println!("What would you like your description to be?");
     let mut description = String::new();
     stdin().read_line(&mut description).unwrap();
+    let description = &description[..(description.len() - 1)];
 
     println!("What would you like your slug to be?");
     let mut slug = String::new();
     stdin().read_line(&mut slug).unwrap();
+    let slug = &slug[..(slug.len() - 1)];
 
     println!("\nOk! Let's write {} (Press {} when finished)\n", title, EOF);
     let mut body = String::new();
