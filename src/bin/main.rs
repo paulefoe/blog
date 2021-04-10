@@ -43,7 +43,7 @@ fn index(conn: DbConn) -> Template {
     let posts = Post::all(&conn);
     // println!("{}", markdown_to_html("# Habits I want to develop as a Software Engineer", &ComrakOptions::default()),);
     Template::render("index", &TemplateListContext {
-        title: "Hello",
+        title: "Blog",
         parent: "layout",
         posts: posts
     })
@@ -51,10 +51,11 @@ fn index(conn: DbConn) -> Template {
 
 #[get("/blog/<slug>")]
 fn detail(conn: DbConn, slug: String) -> Template {
-    let post = Post::detail(&conn, slug);
+    let post = Post::detail(&conn, &slug);
+    Post::increment_views_count(&conn, &slug);
     // println!("{}", markdown_to_html("# Habits I want to develop as a Software Engineer", &ComrakOptions::default()),);
     Template::render("detail", &TemplateDetailContext {
-        title: "Hello",
+        title: "Blog",
         parent: "layout",
         post
     })

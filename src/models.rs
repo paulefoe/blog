@@ -40,8 +40,14 @@ impl Post {
         .expect("Error loading posts")
     }
 
-    pub fn detail(conn: &SqliteConnection, other_slug: String) -> Post {
+    pub fn detail(conn: &SqliteConnection, other_slug: &String) -> Post {
         let a: Post = posts::dsl::posts.filter(slug.eq(other_slug)).first(conn).expect("Did'n find the post");
         a
+    }
+
+    pub fn increment_views_count(conn: &SqliteConnection, other_slug: &String) {
+        // let r = diesel::update(posts).set(views_count.eq(views_count + 1));
+        // println!("{:?}", r);
+        diesel::update(posts.filter(slug.eq(other_slug))).set(views_count.eq(views_count + 1)).execute(conn);
     }
 }
