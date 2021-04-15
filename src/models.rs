@@ -36,7 +36,7 @@ pub struct NewPost<'a> {
 impl Post {
     pub fn all(conn: &SqliteConnection) -> Vec<Post> {
         posts::dsl::posts
-        .order(id.desc())
+        .order(created_at.desc())
         .limit(5)
         .load::<Post>(conn)
         .expect("Error loading posts")
