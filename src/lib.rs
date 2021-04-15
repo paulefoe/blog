@@ -3,7 +3,7 @@ pub mod models;
 use chrono::Utc;
 
 // use self::models::{Post, NewPost};
-use self::models::{NewPost};
+use self::models::{NewPost, Post};
 
 
 #[macro_use]
@@ -46,4 +46,16 @@ pub fn create_post<'a>(
     diesel::insert_into(posts::table)
         .values(&new_post)
         .execute(conn)
+}
+
+pub fn update_post<'a>(
+    conn: &SqliteConnection, 
+    body: &'a str,
+    slug: &'a str,
+    ) -> () {
+    use schema::posts;
+    let now = Utc::now();
+    // let s = String::from(slug);
+    println!("{} string from slig {}", &slug, &body);
+    Post::update_body(&conn, &String::from(slug), &String::from(body));
 }

@@ -2,11 +2,12 @@ use super::schema::posts::dsl::*;
 use chrono::naive::NaiveDateTime;
 use super::schema::posts;
 use serde::{Serialize};
-use crate::diesel::query_dsl::limit_dsl::LimitDsl;
+// use crate::diesel::query_dsl::limit_dsl::LimitDsl;
 use crate::diesel::RunQueryDsl;
 use diesel::sqlite::SqliteConnection;
-use crate::diesel::query_dsl::filter_dsl::FilterDsl;
+// use crate::diesel::query_dsl::filter_dsl::FilterDsl;
 use crate::diesel::ExpressionMethods;
+use crate::diesel::QueryDsl;
 
 #[derive(Queryable, Serialize)]
 pub struct Post {
@@ -35,6 +36,7 @@ pub struct NewPost<'a> {
 impl Post {
     pub fn all(conn: &SqliteConnection) -> Vec<Post> {
         posts::dsl::posts
+        .order(id.desc())
         .limit(5)
         .load::<Post>(conn)
         .expect("Error loading posts")
@@ -46,8 +48,10 @@ impl Post {
     }
 
     pub fn increment_views_count(conn: &SqliteConnection, other_slug: &String) {
-        // let r = diesel::update(posts).set(views_count.eq(views_count + 1));
-        // println!("{:?}", r);
-        diesel::update(posts.filter(slug.eq(other_slug))).set(views_count.eq(views_count + 1)).execute(conn);
+        diesel::update(posts.filter(slug.eq(other_slug))).set(views_count.eq(views_count + 1)).execute(conn).unwrap();
+    }
+
+    pub fn update_body(conn: &SqliteConnection, other_slug: &String, new_body: &String) {
+        diesel::update(posts.filter(slug.eq(other_slug))).set(body.eq(new_body)).execute(conn).unwrap();
     }
 }

@@ -5,13 +5,16 @@ extern crate rocket_contrib;
 extern crate blog;
 
 use rocket::Request;
-use rocket::response::Redirect;
 use rocket_contrib::templates::{Template, handlebars};
 use serde::{Serialize};
 use rocket_contrib::{serve::{StaticFiles}};
 use comrak::{markdown_to_html, ComrakOptions};
 use rocket_contrib::databases::{diesel, database};
 use chrono::{NaiveDateTime};
+use rss::{ChannelBuilder, Item};
+use rocket::response::content;
+
+
 
 use handlebars::{Helper, Handlebars, Context, RenderContext, Output, HelperResult, JsonRender};
 
@@ -41,7 +44,6 @@ pub struct DbConn(diesel::SqliteConnection);
 #[get("/")]
 fn index(conn: DbConn) -> Template {
     let posts = Post::all(&conn);
-    // println!("{}", markdown_to_html("# Habits I want to develop as a Software Engineer", &ComrakOptions::default()),);
     Template::render("index", &TemplateListContext {
         title: "Blog",
         parent: "layout",
@@ -49,11 +51,36 @@ fn index(conn: DbConn) -> Template {
     })
 }
 
+#[get("/blog/rss")]
+fn rss(conn: DbConn) -> content::Xml<String> {
+    let posts = Post::all(&conn);
+
+    let mut items: Vec<Item> = vec![];
+    for post in posts {
+        let mut item = Item::default();
+        item.set_title(post.title);
+        item.set_link(format!("https://paulefou.com/blog/{}", post.slug));
+        item.set_description(post.description);
+        item.set_author(String::from("Paulefou"));
+        item.set_content(markdown_to_html(&post.body, &ComrakOptions::default()));
+        &items.push(item);
+    }
+
+    let channel = ChannelBuilder::default()
+    .title("paulefou blog")
+    .link("https://paulefou.com")
+    .description("An RSS feed for paulefou blog posts.")
+    .items(items)
+    .build()
+    .unwrap();
+
+    content::Xml(channel.to_string())
+}
+
 #[get("/blog/<slug>")]
 fn detail(conn: DbConn, slug: String) -> Template {
     let post = Post::detail(&conn, &slug);
     Post::increment_views_count(&conn, &slug);
-    // println!("{}", markdown_to_html("# Habits I want to develop as a Software Engineer", &ComrakOptions::default()),);
     Template::render("detail", &TemplateDetailContext {
         title: "Blog",
         parent: "layout",
@@ -100,7 +127,6 @@ fn format_date(
         ).unwrap();
 
         out.write(format!("{}", date.format("%Y-%m-%d")).as_str())?;
-        // out.write(&param.value().render())?;
     }
 
     Ok(())
@@ -114,7 +140,7 @@ fn markdown_to_html_templates(
     out: &mut dyn Output
 ) -> HelperResult {
     if let Some(param) = h.param(0) {
-        out.write(&*markdown_to_html(&param.value().render(), &ComrakOptions::default()));
+        out.write(&*markdown_to_html(&param.value().render(), &ComrakOptions::default()))?;
     }
 
     Ok(())
@@ -123,7 +149,7 @@ fn markdown_to_html_templates(
 fn rocket() -> rocket::Rocket {
     rocket::ignite()
         .mount("/", StaticFiles::from("/home/paulefou/other_projects/blog/static"))
-        .mount("/", routes![index, about, detail, contact])
+        .mount("/", routes![index, about, detail, contact, rss])
         .register(catchers![not_found])
         .attach(DbConn::fairing())
         .attach(Template::custom(|engines| {
