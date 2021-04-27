@@ -1,28 +1,45 @@
+@font-face {
+    font-family: sourceCode;
+    src: url(source_code_pro/source_code.ttf.woff2);
+  }
+
 body {
-    background-color: #272020;
-    color: #ccb4a3;
-    font-family: Lora,'Palatino Linotype','Book Antiqua','New York','DejaVu serif',serif;
+    background-color: #282c35;
+    /* color: #ccb4a3; */
+    color: #DAE2DF;
+    font-family: "sourceCode","Helvetica", "Arial", sans-serif;
     font-size: 1.2em;
+    line-height: 1.5;
+    padding: 4em 1em;
+}
+
+h2 {
+    margin-top: 1em;
+    padding-top: 1em;
+}
+
+code,
+pre {
+    background-color: #353535;
 }
 
 code {
-    background-color: #353535;
-    border: none;
-    font-family: monospace;
-    padding: .2em .4em;
-    font-size: .86em;
-    border-radius: .25em;
+  padding: 2px 4px;
+  vertical-align: text-bottom;
+}
+
+pre {
+  padding: 1em;
 }
 
 .description {
-    color: #444;
+    color: #DAE2DF;
     font-size: 1.1em;
     margin-top: .5em;
-    line-height: 1.5;
 }
 
 a {
-    color: #dddddd;
+    color: #C0FDFB;
     text-decoration: none;
     cursor: pointer;
 }
@@ -51,8 +68,6 @@ nav.navigation  ul li {
 nav.navigation  ul li a {
     display: block;
     float: left;
-    /* padding: 3px 6px; */
-    /* color: #575c7d; */
     font-size:22px;
     text-decoration: none;
     font-weight: bold;
