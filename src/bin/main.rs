@@ -148,7 +148,6 @@ fn markdown_to_html_templates(
 
 fn rocket() -> rocket::Rocket {
     rocket::ignite()
-        .mount("/", StaticFiles::from("/home/paulefou/other_projects/blog/static"))
         .mount("/", routes![index, about, detail, contact, rss])
         .register(catchers![not_found])
         .attach(DbConn::fairing())
