@@ -27,14 +27,16 @@ struct TemplateListContext {
     title: &'static str,
     // This key tells handlebars which template is the parent.
     parent: &'static str,
-    posts: Vec<Post>
+    posts: Vec<Post>,
+    description: String
 }
 
 #[derive(Serialize)]
 struct TemplateDetailContext {
-    title: &'static str,
+    title: String,
     parent: &'static str,
     post: Post,
+    description: String,
 }
 
 #[database("posts")]
@@ -47,7 +49,8 @@ fn index(conn: DbConn) -> Template {
     Template::render("index", &TemplateListContext {
         title: "Blog",
         parent: "layout",
-        posts: posts
+        posts: posts,
+        description: String::from("Read my latest blogs and subscribe to rss!")
     })
 }
 
@@ -82,9 +85,10 @@ fn detail(conn: DbConn, slug: String) -> Template {
     let post = Post::detail(&conn, &slug);
     Post::increment_views_count(&conn, &slug);
     Template::render("detail", &TemplateDetailContext {
-        title: "Blog",
+        title: String::from(&post.title),
         parent: "layout",
-        post
+        post: post,
+        description: String::from(&post.description)
     })
 }
 
@@ -94,6 +98,7 @@ fn about() -> Template {
         title: "About",
         parent: "layout",
         posts: vec![],
+        description: String::from("Info about me and what I'm doing")
     })
 }
 
@@ -103,6 +108,7 @@ fn contact() -> Template {
         title: "Contact",
         parent: "layout",
         posts: vec![],
+        description: String::from("How to contact me and other useful links")
     })
 }
 
