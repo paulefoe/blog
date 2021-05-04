@@ -8,9 +8,13 @@
     <meta name="description" content={{description}}>
     <meta property="og:title" content="{{title}} • Paulefou site">
     <meta property="og:description" content="{{description}}">
-    <meta property="og:image" content="{{image}}">
+    <meta property="og:locale" content="en_US">
+    <meta name="twitter:card" content="summary">
+    {{!-- <meta property="og:image" content="{{image}}"> --}}
     <link rel="stylesheet" href="/css/main.css">
-    
+    {{#> head-block}}
+      {{!-- Custom <head> content per page could be added. --}}
+    {{/head-block}}
     <meta name="author" content="paulefou">
     
 

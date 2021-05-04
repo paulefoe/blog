@@ -87,8 +87,8 @@ fn detail(conn: DbConn, slug: String) -> Template {
     Template::render("detail", &TemplateDetailContext {
         title: String::from(&post.title),
         parent: "layout",
+        description: String::from(&post.description),
         post: post,
-        description: String::from(&post.description)
     })
 }
 
